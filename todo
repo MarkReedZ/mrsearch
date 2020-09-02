@@ -1,0 +1,9 @@
+
+
+Return most recent first 
+  prepend new items to the existing list 
+    - We can have empty space on the left and shift our metadata left 
+         f f f m l l l l  - 4 items
+         f f m l l l l l  - 5 items
+    
+

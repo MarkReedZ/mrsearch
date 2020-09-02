@@ -1,0 +1,8 @@
+
+
+Search term hash table buckets look like this
+  ht[hash] ->  [num=3] [totkeylen] keylen keylen keylen key key key ptr ptr ptr
+
+  
+
+
