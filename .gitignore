@@ -1,3 +1,11 @@
+fsblocks
+z
+*.mrp
+__pycache__/
+*.pyc
+mrsearch
+
+
 # Prerequisites
 *.d
 

@@ -1,5 +1,4 @@
 
-#include <zstd.h>
 #include <signal.h>
 #include <getopt.h>
 #include <stdarg.h>
@@ -479,12 +478,18 @@ int on_data(void *c, int fd, ssize_t nread, char *buf) {
                    
       uint64_t *lst = get_list(p+3, len);
       if ( lst == NULL ) {
-        printf("  not found\n");
-      } else {
-        printf("  found %p\n",lst);
-        for ( int j = 0; j < mrlist_len(lst); j++ ) {
-          printf(" lst[%d]= 0x%lx\n", j, lst[j]);
+        //printf("  not found\n");
+        if ( conn->getq_head ) conn_queue_buffer( conn, resp_get_not_found, resp_get_not_found_len );
+        else {
+          int n =  conn_write_buffer( conn, resp_get_not_found,   resp_get_not_found_len );
+          if ( n ) conn_queue_buffer( conn, resp_get_not_found+n, resp_get_not_found_len-n );
         }
+
+      } else {
+        //printf("  found %p\n",lst);
+        //for ( int j = 0; j < mrlist_len(lst); j++ ) {
+          //printf(" lst[%d]= 0x%lx\n", j, lst[j]);
+        //}
 
         // If we have items queued up add this one 
         char *ret = (char*)lst; ret -= 4;
@@ -526,7 +531,7 @@ int on_data(void *c, int fd, ssize_t nread, char *buf) {
       char *pch = strtok (p," ,-.\n");
       while (pch != NULL)
       {
-        printf (">%s<\n",pch);
+        //printf (">%s<\n",pch);
         toks[num_toks++] = pch;
         pch = strtok (NULL, " ,.-");
       }
@@ -536,14 +541,14 @@ int on_data(void *c, int fd, ssize_t nread, char *buf) {
 
       // for each term get the list from the hashtable if null create a new one.  Add the id to the list
       for (int i = 0; i < num_toks; i++ ) {
-        printf(" term %s\n", toks[i]);
+        //printf(" term %s\n", toks[i]);
         uint64_t *lst = get_list(toks[i], strlen(toks[i]));
         mrlist_add( lst, id );  
 
-        printf(" List for term %s len %d\n", toks[i], mrlist_len(lst) );
-        for ( int j = 0; j < mrlist_len(lst); j++ ) {
-          printf(" lst[%d]= 0x%lx\n", j, lst[j]);
-        }
+        //printf(" List for term %s len %d\n", toks[i], mrlist_len(lst) );
+        //for ( int j = 0; j < mrlist_len(lst); j++ ) {
+          //printf(" lst[%d]= 0x%lx\n", j, lst[j]);
+        //}
       }
 
       //num_writes += 1;

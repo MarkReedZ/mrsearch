@@ -25,7 +25,6 @@ uint64_t ht_find(hashtable_t *ht, char *key, uint16_t keylen, uint64_t hv) {
   char *p = ht->tbl[hash];
 
   if ( p == NULL ) return 0;
-  printf("DELME ht_find found bucket %p\n",p);
 
   // ht[hash] ->  [num=3] [totkeylen] len len len key key key - ptr ptr ptr
   uint8_t num = p[0];
@@ -33,7 +32,6 @@ uint64_t ht_find(hashtable_t *ht, char *key, uint16_t keylen, uint64_t hv) {
   uint64_t *itemptr = (uint64_t*)(p + 2 + p[1]);
   p += 2; 
   for (int x = 0; x < num; x++) {
-    if ( keylen == p[x] && (memcmp(key, (p+num), keylen) == 0) ) printf("DELME ht_find found blockAddr %lx\n", itemptr[x]);
     if ( keylen == p[x] && (memcmp(key, (p+num), keylen) == 0) ) return itemptr[x];
   }
   return 0;
@@ -48,7 +46,6 @@ void ht_insert(hashtable_t *ht, uint64_t blockAddr, char *key, uint16_t keylen, 
 
   if ( p == NULL ) {
     p = malloc( 3 + keylen + 8 );
-    printf("DELME ht malloc bucket %p\n",p);
     p[0] = 1;
     p[1] = keylen+1;
     p[2] = keylen;
@@ -61,7 +58,6 @@ void ht_insert(hashtable_t *ht, uint64_t blockAddr, char *key, uint16_t keylen, 
 
     p += 2; 
     for (int x = 0; x < num; x++) {
-      if ( keylen == p[x] && (memcmp(key, (p+num), keylen) == 0) ) printf("DELME ht_insert found blockAddr %lx\n", itemptr[x]);
       if ( keylen == p[x] && (memcmp(key, (p+num), keylen) == 0) ) {
         *itemptr = blockAddr;
         return;
@@ -70,11 +66,9 @@ void ht_insert(hashtable_t *ht, uint64_t blockAddr, char *key, uint16_t keylen, 
     p -= 2;
 
     // Otherwise add
-    printf("DELME ht found bucket %p\n",p);
     int bytes = p[1] + 2 + p[0]*8;
     bytes += keylen + 1 + 8;
     p = realloc( p, bytes );
-    printf("DELME ht realloc bucket %p\n",p);
     p[2+p[0]] = keylen;
     p[0] = p[0] + 1;
     memcpy( p+3+p[1], key, keylen );
@@ -82,11 +76,10 @@ void ht_insert(hashtable_t *ht, uint64_t blockAddr, char *key, uint16_t keylen, 
   }
   uint64_t *bptr = (uint64_t*)(p+2+p[1]);
   *bptr = blockAddr; 
-  printf("DELME ht_insert setting blockAddr %lx at %p\n",blockAddr,bptr);
  
   ht->tbl[hash] = p;
 
-  ht_print_bucket(p);
+  //ht_print_bucket(p);
 
 }
 

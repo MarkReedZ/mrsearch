@@ -38,12 +38,8 @@ void mrlist_add( uint64_t *lst, uint64_t item) {
   uint32_t *ip = (uint32_t*)lst;
   uint32_t max = ip[-2]; 
   uint32_t cur = ip[-1]; 
-  printf("mrlist_add cur %d max %d\n",cur, max);
-  printf("mrlist_add before %p\n", lst+cur);
   lst[cur++] = item;
-  printf("mrlist_add huh\n");
   ip[-1] = cur;
-  printf("mrlist_add done\n");
 }
 
 int mrlist_at_max( uint64_t *lst ) { // returns the mem size if we added one more item
