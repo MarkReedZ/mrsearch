@@ -19,6 +19,8 @@
 
 #include <stdint.h>
 
+#define MRLIST_INITIAL_SIZE 56
+
 #define mrlist_free( lst ) ({ char *p = ((char*)lst)-8; free(p); })
 
 uint64_t *mrlist_new(int len);

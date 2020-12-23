@@ -6,16 +6,16 @@
 #include <stdio.h>
 
 uint64_t *mrlist_new(int len) {
-  char *p = malloc( 8 + len * sizeof(uint64_t) );
+  char *p = malloc( (len+3) * sizeof(uint64_t) );
   uint32_t *ip = (uint32_t*)p; 
   ip[0] = len; ip[1] = 0; // len, max
   return (uint64_t*)(ip+2);
 }
 
 uint64_t *mrlist_init(void *lst, int len) {
-  uint32_t *ip = (uint32_t*)lst; 
-  ip[0] = len; ip[1] = 0; // len, max
-  return (uint64_t*)(ip+2);
+  uint64_t *p = lst; 
+  p[0] = len; p[1] = 0; p[2] = 0; // off,len, max
+  return p+3;
 }
 
 void mrlist_copy(void *lst, void *dst) {

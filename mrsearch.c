@@ -382,7 +382,7 @@ uint64_t *get_list( char *term, int len ) {
   uint64_t blockAddr = ht_find( ht, term, len, hv );
 
   if ( blockAddr == 0 ) {
-    blockAddr = blocks_alloc( 8+4*8 ); // mrlist is of size 8 + 8*num
+    blockAddr = blocks_alloc( MRLIST_INITIAL_SIZE ); // mrlist is of size 8 + 8*num
     void *tmp = blocks_translate( blockAddr );
     lst = mrlist_init(tmp, 4);
     ht_insert( ht, blockAddr+8, term, len, hv );
